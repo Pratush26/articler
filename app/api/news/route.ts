@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
-        const apiKey = process.env.NEWS_API_KEY;
+        const apiKey = process.env.apiKey;
         if (!apiKey) return NextResponse.json({ success: false, data: [], message: "Missing NEWS_API_KEY" });
         const body = await request.json()
         const result = await fetch(`https://newsapi.org/v2/top-headlines/sources?country=${body.country}&category=${body.category}&language=${body.language}&apiKey=${apiKey}`)
