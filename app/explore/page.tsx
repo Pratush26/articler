@@ -1,17 +1,37 @@
 import Card from "@/Components/Sections/Card"
+import Filter from "@/Components/Sections/Filter";
+import Link from "next/link";
 
-export default async function Explore() {
-    const result = await fetch(`https://newsapi.org/v2/top-headlines/sources?country=us&apiKey=f41062826dd84627be60d24ba70174e0`)
-    const {sources} = await result.json()
-    console.log(sources.length)
+type SearchParams = {
+    query?: string;
+    country?: string;
+}
+
+interface dataType {
+    name: string;
+    category: string;
+    id: string;
+    language: string;
+    country: string;
+    description: string;
+    url: string;
+}
+
+export default async function Explore({ searchParams }: { searchParams: SearchParams }) {
+    const q = await searchParams
+    const { country = "us" } = q
+    const result = await fetch(`https://newsapi.org/v2/top-headlines/sources?country=${country}&apiKey=f41062826dd84627be60d24ba70174e0`)
+    const data = await result.json()
+    const sources: dataType[] = data?.sources
     return (
         <main>
             <h1 className="text-2xl font-semibold text-center m-6">Explore</h1>
+            <Filter />
             {
                 sources?.length > 0 ?
                     <section className="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-10">
                         {
-                            sources.map((e, i) => <Card source={e} key={i} /> )
+                            sources.map((e, i) => <Card source={e} key={i} />)
                         }
                     </section>
                     :
