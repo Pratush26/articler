@@ -1,10 +1,11 @@
 import Card from "@/Components/Sections/Card"
 import Filter from "@/Components/Sections/Filter";
-import Link from "next/link";
 
 type SearchParams = {
     query?: string;
     country?: string;
+    category?: string;
+    language?: string;
 }
 
 interface dataType {
@@ -19,8 +20,8 @@ interface dataType {
 
 export default async function Explore({ searchParams }: { searchParams: SearchParams }) {
     const q = await searchParams
-    const { country = "us" } = q
-    const result = await fetch(`https://newsapi.org/v2/top-headlines/sources?country=${country}&apiKey=f41062826dd84627be60d24ba70174e0`)
+    const { country = "us", category = "", language = "" } = q
+    const result = await fetch(`https://newsapi.org/v2/top-headlines/sources?country=${country}&category=${category}&language=${language}&apiKey=f41062826dd84627be60d24ba70174e0`)
     const data = await result.json()
     const sources: dataType[] = data?.sources
     return (
